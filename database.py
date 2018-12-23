@@ -16,30 +16,21 @@ class DatabaseOperations:
         with dbapi2.connect(self.config) as connection:
             cursor = connection.cursor()
 
-            query = "DROP TABLE IF EXISTS Parameters CASCADE"
-            cursor.execute(query)
-
-            query = """CREATE TABLE Parameters(
-                                                    ID SERIAL PRIMARY KEY,
-                                                    Name VARCHAR(50)
-                            )"""
-            cursor.execute(query)
-
             query = "DROP TABLE IF EXISTS Clouds CASCADE"
             cursor.execute(query)
 
             query = """CREATE TABLE Clouds(
                                             ID SERIAL PRIMARY KEY,
                                             Brand VARCHAR(50),
-                                            RegionID INTEGER NOT NULL,
+                                            Region VARCHAR(50),
                                             OperatingSystem VARCHAR(50),
                                             Core INTEGER NOT NULL,
                                             DiskType VARCHAR(50),
                                             DiskCapacity INTEGER NOT NULL,
-                                            Price DECIMAL NOT NULL,
+                                            Price DECIMAL,
                                             RAM DECIMAL NOT NULL,
-                                            BANDWIDTH DECIMAL,
-                                            FOREIGN KEY (RegionID) REFERENCES Parameters(ID)                  
+                                            BANDWIDTH DECIMAL    
                     )"""
             cursor.execute(query)
 
+database = DatabaseOperations()
