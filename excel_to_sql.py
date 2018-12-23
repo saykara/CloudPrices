@@ -7,7 +7,7 @@ class ExcelOperations:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            book = xlrd.open_workbook("Cloud.xlsx")
+            book = xlrd.open_workbook("documents/Cloud.xlsx")
             sheet = book.sheet_by_name("Sayfa1")
 
             query = """INSERT INTO Clouds (Brand, Region, OperatingSystem, Core, DiskType, DiskCapacity, Price, RAM) 
