@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cloud Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<form class="form-horizontal" action="{{ url_for('search_page')}}" method="post">
+    <fieldset>
+    <!-- Region input-->
+        <div class="form-group">
+            <label class="col-md-1 control-label" for="Region">Region</label>
+            <div class="col-md-2">
+                <div class="input-group">
+                    <span class="input-group-addon"></span>
+                    <select id="Region" name="Region" class="selectpicker form-control" required>
+                        <option value="US East">US East</option>
+                        <option value="US West">US West</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    <!-- Operating System input-->
+        <div class="form-group">
+            <label class="col-md-1 control-label" for="OS">Operating System</label>
+            <div class="col-md-2">
+                <div class="input-group">
+                    <span class="input-group-addon"></span>
+                    <select id="OS" name="OS" class="selectpicker form-control" required>
+                        <option value="" selected disabled>Operating System</option>
+                        <option value="Windows">Windows</option>
+                        <option value="Ubuntu">Ubuntu</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    <!-- Core input-->
+        <div class="form-group">
+            <label class="col-md-1 control-label" for="Core">Core</label>
+            <div class="col-md-2">
+                <div class="input-group">
+                    <span class="input-group-addon"></span>
+                    <select id="Core" name="Core" class="selectpicker form-control" required>
+                        <option value="" selected disabled>Core</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="4">4</option>
+                        <option value="8">8</option>
+                        <option value="12">12</option>
+                        <option value="16">16</option>
+                        <option value="24">24</option>
+                        <option value="32">32</option>
+                        <option value="40">40</option>
+                        <option value="64">64</option>
+                        <option value="80">80</option>
+                        <option value="96">96</option>
+                        <option value="160">160</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    <!-- Disk Type input-->
+        <div class="form-group">
+            <label class="col-md-1 control-label" for="DiskType">Disk Type</label>
+            <div class="col-md-2">
+                <div class="input-group">
+                    <span class="input-group-addon"></span>
+                    <select id="DiskType" name="DiskType" class="selectpicker form-control" required>
+                        <option value="" selected disabled>Disk Type</option>
+                        <option value="SSD">SSD</option>
+                        <option value="HDD">HDD</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    <!-- Disk Capacity input-->
+        <div class="form-group">
+            <label class="col-md-1 control-label" for="DiskCapacity">Disk Capacity</label>
+            <div class="col-md-2">
+                <div class="input-group">
+                    <span class="input-group-addon"></span>
+                    <select id="DiskCapacity" name="DiskCapacity" class="selectpicker form-control" required>
+                        <option value="" selected disabled>Disk Capacity</option>
+                        <option value="128">0-128</option>
+                        <option value="256">129-256</option>
+                        <option value="512">257-512</option>
+                        <option value="1024">513-1024</option>
+                        <option value="2048">1025-2048</option>
+                        <option value="4096">2049-4096</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    <!-- RAM input-->
+        <div class="form-group">
+            <label class="col-md-1 control-label" for="RAM">RAM</label>
+            <div class="col-md-2">
+                <div class="input-group">
+                    <span class="input-group-addon"></span>
+                    <select id="RAM" name="RAM" class="selectpicker form-control" required>
+                        <option value="" selected disabled>RAM</option>
+                        <option value="1">0-1</option>
+                        <option value="2">1-2</option>
+                        <option value="4">2-4</option>
+                        <option value="8">4-8</option>
+                        <option value="12">8-12</option>
+                        <option value="16">12-16</option>
+                        <option value="32">16-32</option>
+                        <option value="64">32-64</option>
+                        <option value="128">64-128</option>
+                        <option value="4000">256+</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    <!-- Button -->
+        <div class="form-group">
+            <div class="col-md-2">
+                <button id="search_button" name="search_button" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+</fieldset>
+</form>
+<table class="table">
+          <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Region</th>
+                <th scope="col">Operating S.</th>
+                <th scope="col">Cores</th>
+                <th scope="col">Disk Type</th>
+                <th scope="col">Disk Cap.</th>
+                <th scope="col">Ram</th>
+                <th scope="col">Price(Monthly-$)</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for search in searchList %}
+            <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{search[1]}}</td>
+                    <td>{{search[2]}}</td>
+                    <td>{{search[3]}}</td>
+                    <td>{{search[4]}}</td>
+                    <td>{{search[5]}}</td>
+                    <td>{{search[6]}}</td>
+                    <td>{{search[8]}}</td>
+                    <td>{{search[7]}}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+</body>
+</html>
