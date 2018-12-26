@@ -3,7 +3,7 @@ from database import DatabaseOperations
 from excel_to_sql import ExcelOperations
 from cloud import CloudOperations
 app = Flask(__name__)
-
+app.config.from_object('settings')
 
 @app.route('/',  methods=['GET', 'POST'])
 def search_page():
