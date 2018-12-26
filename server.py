@@ -2,7 +2,6 @@ from flask import Flask, render_template, request
 from database import *
 from excel_to_sql import ExcelOperations
 from cloud import CloudOperations
-from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
 app.config.from_object('settings')
@@ -40,8 +39,6 @@ def excel_page():
     excel = ExcelOperations()
     excel.transfer()
     return "Data was transferred to the database!"
-
-
 
 
 if __name__ == '__main__':
