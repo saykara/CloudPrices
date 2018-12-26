@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from database import DatabaseOperations
+from database import *
 from excel_to_sql import ExcelOperations
 from cloud import CloudOperations
 from gevent.pywsgi import WSGIServer
