@@ -8,7 +8,7 @@ class DatabaseOperations:
         if DATABASE_URL is not None:
             self.config = DATABASE_URL
         else:
-            self.config = """user='postgres' password='12345' host='localhost' port=5000 dbname='cloudprices'"""
+            self.config = """user='postgres' password='12345' host='localhost' port=5432 dbname='cloudprices'"""
 
 
     def create_tables(self):
