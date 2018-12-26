@@ -45,8 +45,6 @@ def excel_page():
 
 
 if __name__ == '__main__':
-    #port = app.config.get("PORT", 5000)
-    #debug = True
-    #app.run(host='0.0.0.0', port=port, debug=debug)
-    http_server = WSGIServer(('', 5000), app)
-    http_server.serve_forever()
+    port = app.config.get("PORT", 5000)
+    debug = True
+    app.run(host='0.0.0.0', port=port, debug=debug)
