@@ -2,6 +2,8 @@ from flask import Flask, render_template, request
 from database import DatabaseOperations
 from excel_to_sql import ExcelOperations
 from cloud import CloudOperations
+from gevent.pywsgi import WSGIServer
+
 app = Flask(__name__)
 app.config.from_object('settings')
 
@@ -43,6 +45,8 @@ def excel_page():
 
 
 if __name__ == '__main__':
-    port = app.config.get("PORT", 5000)
-    debug = True
-    app.run(host='0.0.0.0', port=port, debug=debug)
+    #port = app.config.get("PORT", 5000)
+    #debug = True
+    #app.run(host='0.0.0.0', port=port, debug=debug)
+    http_server = WSGIServer(('', 5000), app)
+    http_server.serve_forever()

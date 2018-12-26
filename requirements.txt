@@ -2,3 +2,4 @@ Flask>=1.0
 psycopg2-binary>=2.7
 gunicorn>=19.9
 xlrd>=1.2
+gevent>=1.3
