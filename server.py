@@ -24,6 +24,8 @@ def search_page():
 
 @app.route('/result',  methods=['GET', 'POST'])
 def result_page(searchList):
+    print("Search List =>")
+    print(searchList)
     return render_template("cloud_search.html", searchList=searchList)
 
 
@@ -31,6 +33,7 @@ def result_page(searchList):
 def init_page():
     db = DatabaseOperations()
     db.create_tables()
+    print("Database initialized!")
     return "Database initialized!"
 
 
@@ -38,6 +41,7 @@ def init_page():
 def excel_page():
     excel = ExcelOperations()
     excel.transfer()
+    print("Data was transferred to the database!")
     return "Data was transferred to the database!"
 
 

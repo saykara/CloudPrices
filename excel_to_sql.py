@@ -6,7 +6,7 @@ class ExcelOperations:
     def transfer(self):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-
+            print("Transfer operation started..")
             book = xlrd.open_workbook("documents/Cloud.xlsx")
             sheet = book.sheet_by_name("Sayfa1")
 
@@ -28,5 +28,6 @@ class ExcelOperations:
                 cursor.execute(query, values)
             connection.commit()
             cursor.close()
+            print("Transfer operation ended..")
             return
 
