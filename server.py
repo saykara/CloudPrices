@@ -16,7 +16,7 @@ def search_page():
         ramEnd= request.form['RAM']
         diskStart = cloud.Get_Disk_Capacity(diskEnd)
         ramStart = cloud.Get_Ram_Capacity(ramEnd)
-        searchList = cloud.Search_Cloud(region=request.form['Region'], os=request.form['OS'], core=request.form['Core'],
+        searchList = cloud.Search_Cloud_v2(region=request.form['Region'], os=request.form['OS'], core=request.form['Core'],
                                         diskType=request.form['DiskType'], diskCapStart=diskStart, diskCapEnd=int(diskEnd),
                                         ramStart=ramStart, ramEnd=int(ramEnd))
         return result_page(searchList)
