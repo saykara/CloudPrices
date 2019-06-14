@@ -45,7 +45,7 @@ def create_clouds_randomly():
     space = CloudSpace()
     brand_list = parameters.CloudParameters.brand
     region_list = parameters.CloudParameters.region
-    os_list = parameters.CloudParameters.operating_system
+    os_list = parameters.CloudParameters.os
     for brand in brand_list:
         provider = Provider(brand)
         for region in region_list:
