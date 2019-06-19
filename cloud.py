@@ -17,16 +17,18 @@ class Cloud:
 
 class CloudOperations:
     @classmethod
-    def Search_Cloud(cls, region, os, core, diskType, diskCapStart, diskCapEnd, ramStart, ramEnd):
+    def Search_Cloud(cls, region, os, core, ram):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             cloud = None
-            query = """SELECT * FROM Clouds 
-                    WHERE Region = %s AND OperatingSystem = %s AND Core = %s AND DiskType = %s AND 
-                    DiskCapacity >= %s AND DiskCapacity <= %s AND
-                    RAM > %s AND RAM <= %s"""
+            ram_start, ram_end = cls.Get_Ram_Capacity_v2(ram=ram, cpu=core)
+            query = """SELECT b.brand, r.region, c.operatingsystem, c.core, c.ram, c.price
+                       FROM cloud as c, regions as r, brands as b 
+                       WHERE c.brandid = b.id AND c.regionid = r.id AND 
+                       regionid = %s AND OperatingSystem = %s AND Core = %s 
+                       AND Ram >= %s AND Ram <= %s"""
             try:
-                cursor.execute(query, (str(region), str(os), str(core), str(diskType), str(diskCapStart), str(diskCapEnd), str(ramStart), str(ramEnd)))
+                cursor.execute(query, (str(cls.convert_region(region)), str(os), str(core), str(ram_start), str(ram_end)))
                 cloud = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
@@ -37,33 +39,23 @@ class CloudOperations:
             if cloud is not None:
                 result = []
                 for i in cloud:
-                    input = [i[0], i[1], i[2], i[3], i[4], i[5], i[6], i[7], i[8], i[9]]
+                    input = [i[0], i[1], i[2], i[3], i[4], i[5]]
                     result.append(input)
                 return result
             else:
                 return None
 
     @classmethod
-    def Search_Cloud_v2(cls, region, os, core, diskType, diskCapStart, diskCapEnd, ramStart, ramEnd):
+    def Search_Storage(cls, region, storage_type, storage):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             cloud = None
-            query = "SELECT * FROM Clouds WHERE"
-            if region != 0:
-                query += "Region = " + region.str() + " AND "
-            if os != 0:
-                query += "OperatingSystem = " + os.str() + " AND "
-            if core != 0:
-                query += "Core = " + core.str() + " AND "
-            if diskType != 0:
-                query += "DiskType = " + diskType.str() + " AND "
-            if diskCapEnd != 0:
-                query += "DiskCapacity >= " + diskCapStart.str() + " AND " + "DiskCapacity <= " + diskCapEnd.str() + " AND "
-            if ramEnd != 0:
-                query += "RAM >= " + ramStart.str() + " AND " + "RAM <= " + ramEnd.str() + " AND "
-
+            query = """SELECT b.brand, r.region, s.diskcapacity, s.disktype, s.price 
+                       FROM cloud_storage as s, regions as r, brands as b
+                       WHERE s.brandid = b.id AND s.regionid = r.id AND 
+                       regionid = %s AND diskcapacity = %s AND disktype = %s """
             try:
-                cursor.execute(query,)
+                cursor.execute(query, (str(cls.convert_region(region)), storage, storage_type))
                 cloud = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
@@ -74,7 +66,7 @@ class CloudOperations:
             if cloud is not None:
                 result = []
                 for i in cloud:
-                    input = [i[0], i[1], i[2], i[3], i[4], i[5], i[6], i[7], i[8], i[9]]
+                    input = [i[0], i[1], i[2], i[3], i[4]]
                     result.append(input)
                 return result
             else:
@@ -105,19 +97,25 @@ class CloudOperations:
                 '128': 64,
                 '4000': 128}.get(ram, 0)
 
+    @classmethod
     def Get_Ram_Capacity_v2(cls, ram, cpu):
         if cpu == 1:
-            ram_start = 0
-            ram_end = 4
+            ram_start = 1
+            ram_end = 3
         elif cpu == 2:
-            ram_start = 3
-            ram_end = 16
+            if ram < 8:
+                ram_start = 3
+                ram_end = 8
+            else:
+                ram_start = 12
+                ram_end = 17
         elif cpu == 4:
-            ram_start = 7
-            ram_end = 30
-        elif cpu == 8:
-            ram_start = 7
-            ram_end = 60
+            if ram < 16:
+                ram_start = 6
+                ram_end = 16
+            else:
+                ram_start = 25
+                ram_end = 31
         return ram_start, ram_end
 
     def Get_Disk_Bound(cls, diskCap):
@@ -140,3 +138,38 @@ class CloudOperations:
             disk_start = 2049
             disk_end = 4096
         return disk_start, disk_end
+
+
+    @classmethod
+    def convert_brand(cls, brand):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+            query = "SELECT id FROM brands WHERE brand like '" + brand + "'"
+            try:
+                cursor.execute(query)
+                brandID = cursor.fetchone()
+
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            return brandID[0]
+
+    @classmethod
+    def convert_region(cls, region):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+            query = "SELECT id FROM regions WHERE region like '" + region + "'"
+
+            try:
+                cursor.execute(query)
+                regionID = cursor.fetchone()
+
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            return regionID[0]

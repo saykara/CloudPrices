@@ -1,5 +1,4 @@
 import parameters
-import random
 
 
 class Provider:
@@ -50,8 +49,8 @@ def create_clouds_randomly():
         provider = Provider(brand)
         for region in region_list:
             for os in os_list:
-                server = Server(region=region, os=os, cpu=random.randint(32, 64), ram=random.randint(128, 256),
-                                hdd=random.randint(2048, 20480), ssd=random.randint(1024, 10240))
+                server = Server(region=region, os=os, cpu=parameters.CloudParameters.p_cpu, ram=parameters.CloudParameters.p_ram,
+                                hdd=parameters.CloudParameters.p_hdd, ssd=parameters.CloudParameters.p_ssd)
                 provider.add_server_into_provider(server)
         space.add_provider_into_space(provider)
     return space

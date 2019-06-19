@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from database import *
 from excel_to_sql import ExcelOperations
 from cloud import CloudOperations
+from simulator import Simulator
 
 app = Flask(__name__)
 app.config.from_object('settings')
@@ -33,17 +34,25 @@ def result_page(searchList):
 def init_page():
     db = DatabaseOperations()
     db.create_tables()
-    print("Database initialized!")
-    return "Database initialized!"
+    db.db_init_parameters()
+    print("Database initialized and parameters added!")
+    return "Database initialized and parameters added!"
 
 
 @app.route('/excel')
 def excel_page():
     excel = ExcelOperations()
-    excel.transfer()
+    excel.transfer_cloud()
+    excel.transfer_storage()
     print("Data was transferred to the database!")
     return "Data was transferred to the database!"
 
+
+@app.route('/sim')
+def simulator_page():
+    sim = Simulator()
+    sim.sim()
+    return "Simulator ended!"
 
 if __name__ == '__main__':
     port = app.config.get("PORT", 5000)
