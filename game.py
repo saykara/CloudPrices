@@ -68,12 +68,12 @@ class Jobs:
             aimed_server.ssd_storage_in_service -= request.storage
 
     @classmethod
-    def find_provider_job(cls, cloud, request):
+    def find_provider_job(cls, cloud, request, vm_db, vm_sto):
         if request.cpu is not 0 and request.ram is not 0:
-            providers = cl.CloudOperations.Search_Cloud(region=request.region, os=request.os, core=request.cpu, ram=request.ram)
+            providers = cls.search_vm(request, vm_db)
             providers.sort(key=lambda x: x[5])
         else:
-            providers = cl.CloudOperations.Search_Storage(region=request.region, storage=request.storage, storage_type=request.storage_type)
+            providers = cls.search_sto(request, vm_sto)
             providers.sort(key=lambda x: x[4])
 
         for i in providers:
@@ -84,3 +84,21 @@ class Jobs:
                 if isEnoughVM and isEnoughStorage:
                     return temp_request
         return False
+
+    @classmethod
+    def search_vm(cls, request, cloud_DB_VM):
+        result = []
+        for i in cloud_DB_VM:
+            ram_start, ram_end = cl.CloudOperations.Get_Ram_Capacity_v2(ram=request.ram, cpu=request.cpu)
+            if i[1] == request.region and i[2] == request.os and i[3] == request.cpu and i[4] >= ram_start and i[4] <= ram_end:
+                result.append(i)
+        return result
+
+    @classmethod
+    def search_sto(cls, request, cloud_DB_sto):
+        result = []
+        for i in cloud_DB_sto:
+            if i[1] == request.region and i[2] == request.storage and i[3] == request.storage_type:
+                result.append(i)
+        return result
+

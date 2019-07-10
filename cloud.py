@@ -72,6 +72,59 @@ class CloudOperations:
             else:
                 return None
 
+    @classmethod
+    def get_all_cloud(cls):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+            cloud = None
+            query = """SELECT b.brand, r.region, c.operatingsystem, c.core, c.ram, c.price
+                           FROM cloud as c, regions as r, brands as b 
+                           WHERE c.brandid = b.id AND c.regionid = r.id """
+            try:
+                cursor.execute(query)
+                cloud = cursor.fetchall()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+            cursor.close()
+
+            if cloud is not None:
+                result = []
+                for i in cloud:
+                    input = [i[0], i[1], i[2], i[3], i[4], i[5]]
+                    result.append(input)
+                return result
+            else:
+                return None
+
+    @classmethod
+    def get_all_storage(cls):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+            cloud = None
+            query = """SELECT b.brand, r.region, s.diskcapacity, s.disktype, s.price 
+                           FROM cloud_storage as s, regions as r, brands as b
+                           WHERE s.brandid = b.id AND s.regionid = r.id """
+            try:
+                cursor.execute(query)
+                cloud = cursor.fetchall()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+            cursor.close()
+
+            if cloud is not None:
+                result = []
+                for i in cloud:
+                    input = [i[0], i[1], i[2], i[3], i[4]]
+                    result.append(input)
+                return result
+            else:
+                return None
+
+    @classmethod
     def Get_Disk_Capacity(cls, diskCap):
         return {
                 '0': 0,
@@ -82,7 +135,7 @@ class CloudOperations:
                 '2048': 1025,
                 '4096': 2049}.get(diskCap, 0)
 
-
+    @classmethod
     def Get_Ram_Capacity(cls, ram):
         return {
                 '0': 0,
