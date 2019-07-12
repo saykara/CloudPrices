@@ -59,7 +59,7 @@ class Node:
         cls.value_list = value
         branch = 3
         count = len(cls.value_list)
-        elements = [-2, 0, 2]
+        elements = [-1, 0, 1]
         needed_element_count = pow(branch, count)
 
         for i in range(count):
@@ -125,7 +125,7 @@ class Node:
 
         if value_list[index] > sum:
             if value_list[index] < sum * 2:
-                return 1 - ((value_list[index] - sum) / sum)
+                return 1 - ((value_list[index] - sum) / (sum * 2))
             else:
                 return 0
         else:

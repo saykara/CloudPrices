@@ -13,7 +13,7 @@ class CloudParameters:
     p_cpu = 32
     p_ram = 96
     p_ssd = 10240
-    p_hdd = 20480
+    p_hdd = 10240
 
 
 class DatabaseParameters:
