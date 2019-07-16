@@ -169,6 +169,9 @@ class CloudOperations:
             else:
                 ram_start = 25
                 ram_end = 31
+        else:
+            ram_start = 0
+            ram_end = 0
         return ram_start, ram_end
 
     def Get_Disk_Bound(cls, diskCap):

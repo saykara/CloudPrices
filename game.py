@@ -92,7 +92,10 @@ class Jobs:
             ram_start, ram_end = cl.CloudOperations.Get_Ram_Capacity_v2(ram=request.ram, cpu=request.cpu)
             if i[1] == request.region and i[2] == request.os and i[3] == request.cpu and i[4] >= ram_start and i[4] <= ram_end:
                 result.append(i)
-        return result
+        if not result:
+            return False
+        else:
+            return result
 
     @classmethod
     def search_sto(cls, request, cloud_DB_sto):
@@ -100,5 +103,7 @@ class Jobs:
         for i in cloud_DB_sto:
             if i[1] == request.region and i[2] == request.storage and i[3] == request.storage_type:
                 result.append(i)
-        return result
-
+        if not result:
+            return False
+        else:
+            return result
